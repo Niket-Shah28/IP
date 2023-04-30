@@ -246,8 +246,8 @@ class Interviewee_Panel_Serializer(serializers.ModelSerializer):
         return serializer.data
     
 class ViewCandidateSerializer(serializers.ModelSerializer):
-    stack = ApplicationStackSerializer(many = True, required = False)
-    interviewee = Interviewee_GET_Serializer(many = True,)
+    # stack = ApplicationStackSerializer(many = True, required = False)
+    interviewee = Interviewee_GET_Serializer()
 
     class Meta:
         model = Application
