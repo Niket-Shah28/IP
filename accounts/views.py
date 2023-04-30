@@ -336,3 +336,93 @@ class Scheduler(GenericAPIView):
 		print(interviewees2)
 
 		return HttpResponse("None")
+
+
+# def create_pannels(Interviewers):
+# 	list_int_obj = [] 
+# 	for intview_obj in Interviewers:
+# 		list_int_obj.append(intview_obj)
+	
+# def get_stack(stack_code):
+# 	if stack_code==1:
+# 		return 'Fr'
+# 	elif stack_code==2:
+# 		return 'D'
+# 	elif stack_code==3:
+# 		return 'N'
+# 	elif stack_code==4:
+# 			return 'R'
+# 	elif stack_code==5:
+# 			return 'Fn'
+# 	elif stack_code==6:
+# 			return 'Fl'
+# 	elif stack_code==7:
+# 			return 'Fd'
+	
+# def get_application_stack(obj_id):
+# 	appl_stack = ApplicationStack.objects.filter(application=obj_id).name
+# 	return appl_stack
+
+# def assign_pannels_to_intervieews(Interviewers, applications):
+
+# 	dict_of_stacks = {
+# 		"django_list": ApplicationStack.objects.filter(name = 'Django'),
+# 		"frontend_list" : ApplicationStack.objects.filter(name = 'Frontend'),
+# 		"node_list" : ApplicationStack.objects.filter(name = 'Node'),
+# 		"native_list" : ApplicationStack.objects.filter(name = 'ReactNative'),
+# 		"flutter_list" : ApplicationStack.objects.filter(name = 'Flutter'),
+# 		"fdjango_list" : ApplicationStack.objects.filter(name = 'FullstackDjango'),
+# 		"fnode_list" : ApplicationStack.objects.filter(name = 'FullstackNode'),
+# 		}
+	
+# 	panels = Panel.objects.all()
+# 	panel_num = panels.count()
+# 	panel_stack_str_list = []
+
+	# for i in range(0, panel_num):
+	# 	panel_stack_str =''
+	# 	for j in panels[i].interviewers:
+	# 		stack_code = j.stack
+	# 		stack_name = get_stack(stack_code)
+	# 		panel_stack_str+=stack_name
+	# 	panel_stack_str_list.append(panel_stack_str)
+
+# 	applications = Application.objects.all()
+# 	application_num = applications.count()
+# 	application_stack_str_list = []
+
+# 	for i in range(0, application_num):
+# 		application_stack_str =''
+# 		for obj_id in applications[i].id:
+# 			stack_code = get_application_stack(obj_id)
+# 			stack_name = get_stack(stack_code)
+# 			panel_stack_str+=stack_name
+# 		application_stack_str_list.append(panel_stack_str)
+	
+
+# def get_info(self, request):
+
+# 	applications = Application.objects.all()
+# 	Interviewers = Interviewer.objects.all()
+
+# 	# create_pannels(Interviewers)
+# 	assign_pannels_to_intervieews(Interviewers, applications)
+
+
+def getPanelInst(appl_stack):
+	# panels = Panel.objects.all()
+	panels = Panel.objects.filter(interviewers__stack = appl_stack)
+	for panel_inst in panels:
+		if panel_inst.interviewees.count() <= 5:
+			return panel_inst
+
+def assign_pannels_to_intervieews():
+	application_stack = ApplicationStack.objects.all()
+	
+	for appl_stack_inst in application_stack:
+		
+		panel = getPanelInst(appl_stack_inst.stacks)
+		interviewee_inst = appl_stack_inst.application.interviewee
+		#add interviewee to panel and save
+		panel.interviewees.add(interviewee_inst)
+	
