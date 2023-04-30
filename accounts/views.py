@@ -423,7 +423,10 @@ def assign_pannels_to_intervieews():
 	for appl_stack_inst in application_stack:
 		
 		panel = getPanelInst(appl_stack_inst.name)
+		print(panel)
 		interviewee_inst = appl_stack_inst.application.interviewee
+		print(appl_stack_inst.application)
+		print(appl_stack_inst)
 		#add interviewee to panel and save
 		panel.interviewees.add(interviewee_inst)
 	
