@@ -224,6 +224,7 @@ class InterviewAPI(GenericAPIView):
 		interviewee = Interviewee.objects.get(user = request.user)
 		panels = Panel.objects.filter(interviewees = interviewee)
 		if not panels:
+			assign_pannels_to_intervieews()
 			return Response({"message" : "Interviews have not been scheduled yet"})
 		else:
 			serializer = Interviewee_Panel_Serializer(panels, many = True)
