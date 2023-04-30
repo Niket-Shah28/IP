@@ -430,3 +430,13 @@ def assign_pannels_to_intervieews():
 		#add interviewee to panel and save
 		panel.interviewees.add(interviewee_inst)
 	
+class Candidate_test_API(GenericAPIView):
+	permission_classes = [InterviewerPermission]
+	serializer_class = ViewCandidateSerializer
+
+	def get(self,request,sapid):
+		
+		#interviewee = Interviewee.objects.get(user = sapid)
+		#application = Application.objects.get(interviewee = interviewee)
+		serializer = ViewCandidateSerializer(sapid)
+		return Response(serializer.data)

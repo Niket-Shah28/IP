@@ -6,6 +6,7 @@ import re
 from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 from rest_framework import status
+import json
 
 email_pattern = re.compile(r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)")
 
@@ -243,3 +244,16 @@ class Interviewee_Panel_Serializer(serializers.ModelSerializer):
             stacks.append(interviewer.stack)
         serializer = StackSerializer(stacks, many = True)
         return serializer.data
+    
+class ViewCandidateSerializer(serializers.ModelSerializer):
+    stack = ApplicationStackSerializer(many = True, required = False)
+    class Meta:
+        model = [Application,User]
+        fields = ['stack','resume_link','sapid','grad_year','email']
+
+    def get_candidate_data(self,sapid):
+        user_data=User.objects.get(sapid=sapid)
+        application=Application.objects.get(interviewee=Interviewee.objects.get(user=sapid))
+        obj={'sapid':sapid,'stack':application.stack,'resume_link':application.resume_link,'grad_year':user_data.grad_year,'email':user_data.email}
+        serialized_data=json.dumps(obj)
+        return serialized_data
