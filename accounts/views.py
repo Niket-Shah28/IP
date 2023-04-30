@@ -412,7 +412,7 @@ class Scheduler(GenericAPIView):
 
 def getPanelInst(appl_stack):
 	# panels = Panel.objects.all()
-	panels = Panel.objects.filter(interviewers__stack = appl_stack)
+	panels = Panel.objects.filter(interviewers__stack__name = appl_stack)
 	for panel_inst in panels:
 		if panel_inst.interviewees.count() <= 5:
 			return panel_inst
@@ -422,7 +422,7 @@ def assign_pannels_to_intervieews():
 	
 	for appl_stack_inst in application_stack:
 		
-		panel = getPanelInst(appl_stack_inst.stacks)
+		panel = getPanelInst(appl_stack_inst.name)
 		interviewee_inst = appl_stack_inst.application.interviewee
 		#add interviewee to panel and save
 		panel.interviewees.add(interviewee_inst)
