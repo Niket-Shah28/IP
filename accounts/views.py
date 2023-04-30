@@ -436,7 +436,8 @@ class Candidate_test_API(GenericAPIView):
 
 	def get(self,request,sapid):
 		
-		#interviewee = Interviewee.objects.get(user = sapid)
-		#application = Application.objects.get(interviewee = interviewee)
-		serializer = ViewCandidateSerializer(sapid)
+		interviewee = Interviewee.objects.get(user = sapid)
+		application = Application.objects.get(interviewee = interviewee)
+		serializer = ViewCandidateSerializer(application)
+		
 		return Response(serializer.data)

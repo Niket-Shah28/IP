@@ -247,13 +247,15 @@ class Interviewee_Panel_Serializer(serializers.ModelSerializer):
     
 class ViewCandidateSerializer(serializers.ModelSerializer):
     stack = ApplicationStackSerializer(many = True, required = False)
-    class Meta:
-        model = [Application,User]
-        fields = ['stack','resume_link','sapid','grad_year','email']
+    interviewee = Interviewee_GET_Serializer(many = True,)
 
-    def get_candidate_data(self,sapid):
-        user_data=User.objects.get(sapid=sapid)
-        application=Application.objects.get(interviewee=Interviewee.objects.get(user=sapid))
-        obj={'sapid':sapid,'stack':application.stack,'resume_link':application.resume_link,'grad_year':user_data.grad_year,'email':user_data.email}
-        serialized_data=json.dumps(obj)
-        return serialized_data
+    class Meta:
+        model = Application
+        fields = '__all__'
+
+    # def get_candidate_data(self,sapid):
+    #     user_data=User.objects.get(sapid=sapid)
+    #     application=Application.objects.get(interviewee=Interviewee.objects.get(user=sapid))
+    #     obj={'sapid':sapid,'stack':application.stack,'resume_link':application.resume_link,'grad_year':user_data.grad_year,'email':user_data.email}
+    #     serialized_data=json.dumps(obj)
+    #     return serialized_data
