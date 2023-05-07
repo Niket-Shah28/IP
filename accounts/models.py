@@ -120,11 +120,11 @@ class Question(models.Model):
 
     stack = models.ForeignKey(Stack, on_delete=models.CASCADE)
     name = models.CharField(max_length=50, blank=True)
-    option1 = models.CharField(max_length=50,  blank=True)
-    option2 = models.CharField(max_length=50,  blank=True)
-    option3 = models.CharField(max_length=50,  blank=True)
-    option4 = models.CharField(max_length=50,  blank=True)
-    option5 = models.CharField(max_length=50,  blank=True)
+    # option1 = models.CharField(max_length=50,  blank=True)
+    # option2 = models.CharField(max_length=50,  blank=True)
+    # option3 = models.CharField(max_length=50,  blank=True)
+    # option4 = models.CharField(max_length=50,  blank=True)
+    # option5 = models.CharField(max_length=50,  blank=True)
 
     def __str__(self):
         return self.name
