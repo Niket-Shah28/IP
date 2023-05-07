@@ -200,7 +200,7 @@ class ScorecardGetAPI(GenericAPIView):
 		app = Application.objects.get(interviewee=interviewee)
 		app_stack = ApplicationStack.objects.filter(application=app).get(name=stack)
 		scorecard = Score.objects.get(stack = app_stack)
-		serializer = self.serializer_class(scorecard)
+		serializer = GetScoreSerializer(scorecard)
 		return Response(serializer.data)
 
 

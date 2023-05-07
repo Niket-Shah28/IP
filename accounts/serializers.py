@@ -259,3 +259,9 @@ class ViewCandidateSerializer(serializers.ModelSerializer):
     #     obj={'sapid':sapid,'stack':application.stack,'resume_link':application.resume_link,'grad_year':user_data.grad_year,'email':user_data.email}
     #     serialized_data=json.dumps(obj)
     #     return serialized_data
+
+class GetScoreSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model= Score
+        fields= '__all__'
