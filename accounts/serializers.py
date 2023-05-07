@@ -184,7 +184,7 @@ class ScoreSerializer(serializers.ModelSerializer):
 
     class Meta:
         model= Score
-        fields= ['sapid','stack','question_no', 'rating']
+        fields= ['stack','question_no', 'rating']
     
     def create(self, validated_data):
 
