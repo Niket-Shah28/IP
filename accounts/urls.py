@@ -13,6 +13,7 @@ urlpatterns = [
 
 #Interviewer APIs
     path('panel_details/', views.PanelAPI.as_view(), name='panel'),
+    path('panel_details_all/',views.All_Panel_data.as_view(),name='all_panels'),
     path('view_candidate/<str:sapid>', views.Candidate_test_API.as_view(), name='candidate_view'),
     path('scorecard_get/<str:sapid>/<str:stack>', views.ScorecardGetAPI.as_view(), name='scorecard_get'),
     path('remarks/', views.RemarksAPI.as_view(), name='remarks'),
