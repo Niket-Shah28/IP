@@ -446,7 +446,7 @@ class All_Panel_data(GenericAPIView):
 	permission_classes = [InterviewerPermission]
 	serializer_class = PanelSerializer
 
-	def get(request):
+	def get(self,request):
 		panel_details=Panel.objects.all()
 		serializer = PanelSerializer(panel_details, many = True)
 		return Response(serializer.data)
