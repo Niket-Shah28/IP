@@ -10,6 +10,7 @@ urlpatterns = [
     path('resources/', views.ResourcesAPI.as_view(), name = 'resources'),
     path('tasks/', views.TaskAPI.as_view(), name='tasks'),
     path('interviews/', views.InterviewAPI.as_view(), name='interviews'),
+    path('appl_num/<str:sapid>', views.NumberOfApplicationAPI, name='countofappl'),
 
 #Interviewer APIs
     path('panel_details/', views.PanelAPI.as_view(), name='panel'),

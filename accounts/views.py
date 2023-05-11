@@ -15,6 +15,8 @@ from django.contrib.auth import authenticate, login
 from rest_framework.response import Response
 from rest_framework import status, permissions
 
+from rest_framework.decorators import api_view, renderer_classes
+from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
 
 class IntervieweeRegisterAPI(GenericAPIView):
 	permission_classes = [permissions.AllowAny]
@@ -453,3 +455,12 @@ class All_Panel_data(GenericAPIView):
 		panel_details=Panel.objects.all()
 		serializer = PanelSerializer(panel_details, many = True)
 		return Response(serializer.data)
+
+@api_view(('GET',))
+def NumberOfApplicationAPI(request, sapid):
+	interviewee_user = Interviewee.objects.get(user = sapid)
+	appl = Application.objects.filter(interviewee = interviewee_user)
+	c=0
+	for obj in appl:
+		c=c+1
+	return Response({"Number of applications":c})
