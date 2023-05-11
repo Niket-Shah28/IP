@@ -463,4 +463,4 @@ def NumberOfApplicationAPI(request, sapid):
 	c=0
 	for obj in appl:
 		c=c+1
-	return Response({"Number of applications":c})
+	return Response({"Number":c})
