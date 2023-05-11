@@ -464,3 +464,15 @@ def NumberOfApplicationAPI(request, sapid):
 	for obj in appl:
 		c=c+1
 	return Response({"Number":c})
+
+
+class IntervieweePanelAPI(GenericAPIView):
+	serializer_class = PanelSerializer
+
+	def get(self,request):
+		interviewee = Interviewee.objects.get(user = request.user)
+		panels = Panel.objects.filter(interviewees = interviewee)
+		if not panels :
+			return Response({"message":"No Panel has been assigned to you"}, status= status.HTTP_404_NOT_FOUND)
+		serializer = PanelSerializer(panels, many = True)
+		return Response(serializer.data)
