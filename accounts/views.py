@@ -48,8 +48,10 @@ class IntervieweeAPI(APIView):
 
 	def put(self, request):
 		interviewee=Interviewee.objects.get(user=request.user)
+		# print(request.user)
 		serializer = self.serializer_class(data=request.data)
-		serializer.is_valid(raise_exception=True)
+		serializer.is_valid()
+		print("Here")
 		serializer.update(interviewee, request.data)
 		return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
 
