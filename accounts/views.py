@@ -50,7 +50,7 @@ class IntervieweeAPI(APIView):
 
 	def put(self, request):
 		interviewee=Interviewee.objects.get(user=request.user)
-		# print(request.user)
+		print(request.user)
 		serializer = self.serializer_class(data=request.data)
 		serializer.is_valid()
 		print("Here")
