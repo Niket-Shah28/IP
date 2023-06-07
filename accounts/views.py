@@ -229,7 +229,8 @@ class InterviewAPI(GenericAPIView):
 		interviewee = Interviewee.objects.get(user = request.user)
 		panels = Panel.objects.filter(interviewees = interviewee)
 		if not panels:
-			assign_pannels_to_intervieews()
+			# assign_pannels_to_intervieews()
+			schedule_interviews()
 			# return Response({"message" : "Interviews have not been scheduled yet"})
 		# else:
 		serializer = Interviewee_Panel_Serializer(panels, many = True)
@@ -415,25 +416,25 @@ class Scheduler(GenericAPIView):
 # 	assign_pannels_to_intervieews(Interviewers, applications)
 
 
-def getPanelInst(appl_stack):
-	# panels = Panel.objects.all()
-	panels = Panel.objects.filter(interviewers__stack__name = appl_stack)
-	for panel_inst in panels:
-		if panel_inst.interviewees.count() <= 5:
-			return panel_inst
+# def getPanelInst(appl_stack):
+# 	# panels = Panel.objects.all()
+# 	panels = Panel.objects.filter(interviewers__stack__name = appl_stack)
+# 	for panel_inst in panels:
+# 		if panel_inst.interviewees.count() <= 5:
+# # 			return panel_inst
 
-def assign_pannels_to_intervieews():
-	application_stack = ApplicationStack.objects.all()
+# def assign_pannels_to_intervieews():
+# 	application_stack = ApplicationStack.objects.all()
 	
-	for appl_stack_inst in application_stack:
+# 	for appl_stack_inst in application_stack:
 		
-		panel = getPanelInst(appl_stack_inst.name)
-		print(panel)
-		interviewee_inst = appl_stack_inst.application.interviewee
-		print(appl_stack_inst.application)
-		print(appl_stack_inst)
-		#add interviewee to panel and save
-		panel.interviewees.add(interviewee_inst)
+# 		panel = getPanelInst(appl_stack_inst.name)
+# 		print(panel)
+# 		interviewee_inst = appl_stack_inst.application.interviewee
+# 		print(appl_stack_inst.application)
+# 		print(appl_stack_inst)
+# 		#add interviewee to panel and save
+# 		panel.interviewees.add(interviewee_inst)
 	
 class Candidate_test_API(GenericAPIView):
 	permission_classes = [InterviewerPermission]
@@ -476,3 +477,88 @@ class IntervieweePanelAPI(GenericAPIView):
 			return Response({"message":"No Panel has been assigned to you"}, status= status.HTTP_404_NOT_FOUND)
 		serializer = PanelSerializer(panels, many = True)
 		return Response(serializer.data)
+	
+def getPanelInst(user, user_appl_dict):
+
+	#get relevant pannels
+	potential_panel_list=[]
+	for appl in user_appl_dict[user]:
+		potential_panel_list.append(Panel.objects.filter(interviewers__stack__name = appl.name))
+	
+	# print(potential_panel_list)
+
+	#to select one pannel:	
+	potential_panel_name_list=[]
+	for panel_insts in potential_panel_list:
+		
+		for inst in panel_insts:
+			potential_panel_name_list.append(inst.name)
+	
+	#count number of pannel hits
+	potential_panel_name_score_dict = {i:potential_panel_name_list.count(i) for i in potential_panel_name_list}
+	# print(potential_panel_name_score_dict)
+
+	#find highest count pannel list
+	high=0
+	high_pannel=[]
+	for key in potential_panel_name_score_dict:
+		if high < potential_panel_name_score_dict[key]:
+			high = potential_panel_name_score_dict[key]
+	for key in potential_panel_name_score_dict:
+		if high == potential_panel_name_score_dict[key]:
+			high_pannel.append(key)
+	# print(high_pannel)
+
+	#check number of intervieews in pannel and assign one with less than fixed number
+	for panel_name in high_pannel:
+		panel_inst = Panel.objects.get(name=panel_name)
+		if panel_inst.interviewees.count() <= 5:
+			return panel_inst
+
+	#no pannel found within given conditions
+	return 0
+	# panels = Panel.objects.all()
+	# panels = Panel.objects.filter(interviewers__stack__name = appl_stack)
+	# for panel_inst in panels:
+	# 	if panel_inst.interviewees.count() <= 5:
+	# 		return panel_inst
+
+def schedule_interviews():
+	application_stack = ApplicationStack.objects.all()
+	
+	appl_user_dict={}
+	for appl_stack_inst in application_stack:
+		appl_user_dict[appl_stack_inst]= appl_stack_inst.application.interviewee
+		# print(appl_stack_inst, appl_stack_inst.application.interviewee)
+		# print('\n')
+
+	user_appl_dict = {}
+	for key, value in appl_user_dict.items():	
+		user_appl_dict.setdefault(value, []).append(key)
+
+	print(user_appl_dict)
+	# print(user_appl_dict)
+	
+	#find the user with most applications
+	reorder_dict = {}
+
+	for itrnum, user in enumerate(user_appl_dict):
+		reorder_dict[user]=len(user_appl_dict[user])
+	print(reorder_dict)
+
+	#sort the above dict acc to number of applications
+	sorted_reorder_dict = sorted(reorder_dict.items(), key=lambda x:x[1], reverse=True)
+	converted_dict = dict(sorted_reorder_dict)
+	print(converted_dict)
+
+	#find pannel for each user
+	for user in converted_dict:
+		
+		#to visualize the dict with all data objects
+		# print('\n')
+		# print(user)
+		# for appl in user_appl_dict[user]:
+		# 	print(appl)
+		# print('\n')
+		panel = getPanelInst(user, user_appl_dict)
+		print(user, panel)
