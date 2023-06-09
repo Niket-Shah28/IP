@@ -22,4 +22,5 @@ urlpatterns = [
     path('score/', views.ScoreAPI.as_view(), name='score'),
     path('scheduling/',views.Scheduler.as_view(), name = 'Scheduler'),
     path('question/<str:stack>',views.QuestionAPI.as_view(), name = 'question'),
+    path('scheduled/',views.schedule_interviews,name='scheduler')
 ]

@@ -101,9 +101,9 @@ class ApplicationStack(models.Model):
         return self.name
 
 class Panel(models.Model):
-    name = models.CharField(max_length= 100)
-    interviewees = models.ManyToManyField(Interviewee,blank = True)
-    interviewers = models.ManyToManyField(Interviewer)
+    name = models.CharField(max_length= 100,unique=True)
+    interviewees = models.ManyToManyField(Interviewee,blank = True,related_name='interviewees')
+    interviewers = models.ManyToManyField(Interviewer,related_name='interviewers')
 
 
     def __str__(self):
