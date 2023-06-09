@@ -668,7 +668,8 @@ def getPanelInst(user, user_appl_dict):
 	# for panel_inst in panels:
 	# 	if panel_inst.interviewees.count() <= 5:
 	# 		return panel_inst
-
+@api_view(('GET',))
+@renderer_classes((JSONRenderer,))
 def schedule_interviews(self):
 	application_stack = ApplicationStack.objects.all()
 	
@@ -710,8 +711,8 @@ def schedule_interviews(self):
 		print(user, panel)
 		obj=Panel.objects.prefetch_related('interviewees').get(name=panel)
 		interviewees=obj.interviewees
-		name=User.objects.filter(name=user)
-		interviewees.add(Interviewee.objects.get(user=name.name))
+		sapid=User.objects.get(sapid=user)
+		interviewees.add(Interviewee.objects.get(user=sapid))
 		obj.save()
 	return Response("Successfully Scheduled")
 		

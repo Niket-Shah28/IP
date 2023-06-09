@@ -24,7 +24,7 @@ class User(AbstractUser):
     objects = UserManager()
 
     def __str__(self):
-        return self.name
+        return self.sapid
 
     @property
     def token(self):
@@ -58,14 +58,14 @@ class Interviewer(models.Model):
     USERNAME_FIELD = 'username'
 
     def __str__(self):
-        return self.user.name
+        return self.user.sapid
 
 class Interviewee(models.Model):
 
     user = models.ForeignKey(User, on_delete= models.CASCADE)
 
     def __str__(self):
-        return self.user.name
+        return self.user.sapid
 
 
 class Task(models.Model):  
