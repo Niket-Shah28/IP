@@ -550,7 +550,7 @@ def getPanelInst(user, user_appl_dict):
 			final_set=final_set.intersection(set(potential_panels[i]))
 		if(final_set):
 			if(len(final_set)==1):
-				final_panel=final_set[0]
+				final_panel=list(final_set)[0]
 				return final_panel
 			else:
 				for panels in final_set:
