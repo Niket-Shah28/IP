@@ -3,6 +3,8 @@ from .permissions import IntervieweePermission, InterviewerPermission
 from django.http import HttpResponse
 from rest_framework.generics import GenericAPIView, ListAPIView
 
+from django.db.models import Count
+
 from django.http.response import JsonResponse
 from rest_framework.generics import GenericAPIView, ListAPIView
 from rest_framework.authtoken.models import Token
@@ -715,4 +717,9 @@ def schedule_interviews(self):
 		interviewees.add(Interviewee.objects.get(user=sapid))
 		obj.save()
 	return Response("Successfully Scheduled")
-		
+
+@api_view(('GET',))
+@renderer_classes((JSONRenderer,))		
+def TotalAppl(self):
+	data = list(ApplicationStack.objects.values('name').annotate(total_count=Count('name')).order_by('name'))
+	return JsonResponse({'stack': data})

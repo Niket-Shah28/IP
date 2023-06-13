@@ -134,3 +134,4 @@ class Score(models.Model):
     stack = models.OneToOneField(ApplicationStack, on_delete=models.CASCADE)
     question    = models.OneToOneField(Question, on_delete=models.CASCADE)
     rating      = models.IntegerField(blank=True)
+    bool = models.BooleanField(default=False)

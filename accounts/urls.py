@@ -12,6 +12,7 @@ urlpatterns = [
     path('interviews/', views.InterviewAPI.as_view(), name='interviews'),
     path('appl_num/<str:sapid>', views.NumberOfApplicationAPI, name='countofappl'),
     path('interviewee_panel/',views.IntervieweePanelAPI.as_view(), name='interview panels'),
+    path('totalperapplstack/', views.TotalAppl, name='totalapplications'),
 
 #Interviewer APIs
     path('panel_details/', views.PanelAPI.as_view(), name='panel'),
