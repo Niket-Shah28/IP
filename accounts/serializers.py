@@ -197,9 +197,15 @@ class ScoreSerializer(serializers.ModelSerializer):
         interviewee = Interviewee.objects.get(user=sapid)
         app = Application.objects.get(interviewee=interviewee)
         app_stack = ApplicationStack.objects.filter(application=app).get(name=stack)
-
+        
         question = Question.objects.get(id=validated_data['question_no'])
-        Score.objects.create(question= question, rating= validated_data['rating'], stack=app_stack)
+        
+        try:
+            score_data=Score.objects.get(question=question,stack=app_stack)
+            score_data.rating=validated_data['rating']
+            score_data.save()
+        except Score.DoesNotExist:
+            Score.objects.create(question= question, rating= validated_data['rating'], stack=app_stack)
 
         return validated_data
     
